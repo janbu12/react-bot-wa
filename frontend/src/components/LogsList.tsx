@@ -12,7 +12,7 @@ interface Log {
 
 const API_URL = `${import.meta.env.VITE_API_URL}/logs`;
 
-export default function Logs() {
+export default function LogsList() {
   const [logs, setLogs] = useState<Log[]>([]);
   const [loading, setLoading] = useState(true);
 

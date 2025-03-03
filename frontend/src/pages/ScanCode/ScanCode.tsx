@@ -1,46 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useWebSocket } from "../../context/WebSocketContext";
 
-const WEBSOCKET_URL = import.meta.env.VITE_WS_URL;
 function ScanCode() {
-    const [qrCode, setQrCode] = useState<string | null>(null);
-    const [status, setStatus] = useState("Menghubungkan...");
-    const [isConnected, setIsConnected] = useState(false);
+    const { isConnected, status, qrCode } = useWebSocket();
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const ws = new WebSocket(WEBSOCKET_URL);
-
-        ws.onopen = () => {
-        console.log("Connected to WebSocket");
-        setStatus("Menunggu QR Code...");
-        };
-
-        ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.type === "qr") {
-            setQrCode(data.data); // Set QR Code image
-            setStatus("Silakan scan QR Code dengan WhatsApp Anda.");
-        } else if (data.type === "ready") {
-            setStatus("WhatsApp terhubung!");
-            setQrCode(null); // Sembunyikan QR Code setelah terhubung
-            setIsConnected(true);
-        } else if (data.type === "authenticated") {
-            setStatus("WhatsApp sudah diautentikasi!");
-        } else if (data.type === "disconnected") {
-            setStatus("WhatsApp terputus. Harap reload dan scan ulang.");
-            setIsConnected(false);
-        }
-        };
-
-        ws.onerror = (err) => {
-        console.error("WebSocket error:", err);
-        setStatus("Terjadi kesalahan koneksi.");
-        };
-
-
-        return () => ws.close();
-    }, []);
 
     useEffect(()=>{
         if (isConnected){

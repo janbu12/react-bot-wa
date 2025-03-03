@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 .button-primary {
-    @apply border border-slate-500 text-slate-500 rounded py-1 hover:cursor-pointer hover:text-white hover:bg-slate-500 transition-all
+    @apply border border-slate-500 text-slate-500 rounded p-2 hover:cursor-pointer hover:text-white hover:bg-slate-500 transition-all
 }
 
 .button-error {
-    @apply border border-red-400 text-red-400 rounded py-1 hover:bg-red-400 hover:text-white hover:cursor-pointer transition-all
+    @apply border border-red-400 text-red-400 rounded p-2 hover:bg-red-400 hover:text-white hover:cursor-pointer transition-all
 }

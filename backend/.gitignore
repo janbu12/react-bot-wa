@@ -2,3 +2,4 @@ node_modules
 session
 .wwebjs_cache
 .env
+database.sqlite

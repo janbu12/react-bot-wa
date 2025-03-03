@@ -127,8 +127,8 @@ wss.on("connection", (ws) => {
         console.log(storedCommand);
 
         if (storedCommand) {
-            const responseMessage = await storedCommand.response.replace(/\{args\}/g, args || ""); // Jika tidak ada args, gunakan string kosong
-            msg.reply(responseMessage);
+            const responseMessage = storedCommand.response.replace(/\{args\}/g, args || ""); // Jika tidak ada args, gunakan string kosong
+            await msg.reply(responseMessage);
     
             // Simpan log ke database
             db.prepare(

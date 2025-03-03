@@ -97,8 +97,8 @@ export default function CommandList() {
       )}
 
       {editingCommand && (
-        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
-          <div className="bg-white p-4 rounded shadow-lg">
+        <div className="fixed inset-0 bg-[rgba(0,0,0,0.3)] flex justify-center items-center">
+          <div className="bg-white p-4 rounded shadow-lg w-full sm:max-w-md">
             <h2 className="text-lg font-bold">Edit Command</h2>
             <form onSubmit={updateCommand} className="flex flex-col gap-3">
               <input
@@ -126,8 +126,8 @@ export default function CommandList() {
                 className="border p-2"
               />
               <div className="flex justify-end">
-                <button type="button" onClick={() => setEditingCommand(null)} className="bg-gray-500 text-white p-2">Batal</button>
-                <button type="submit" className="bg-blue-500 text-white p-2 ml-2">Simpan</button>
+                <button type="button" onClick={() => setEditingCommand(null)} className="button-error p-2">Batal</button>
+                <button type="submit" className="button-primary p-2 ml-2">Simpan</button>
               </div>
             </form>
           </div>
