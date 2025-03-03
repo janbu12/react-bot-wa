@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {useEffect , useState } from "react";
 import axios from "axios";
 
 interface Log {
@@ -19,6 +19,7 @@ export default function Logs() {
   useEffect(() => {
     fetchLogs();
   }, []);
+
 
   const fetchLogs = async () => {
     try {

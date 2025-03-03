@@ -68,6 +68,7 @@ wss.on("connection", (ws) => {
 
     // Jika sesi sudah ada, kirim status "ready"
     client.getState().then((state) => {
+        console.log(state);
         if (state === "CONNECTED") {
         ws.send(JSON.stringify({ type: "ready", message: "WhatsApp sudah terhubung!" }));
         }
@@ -101,7 +102,7 @@ wss.on("connection", (ws) => {
     });
 
     client.on("message_create", async (msg) => {
-        console.log("Received data:", msg);
+        // console.log("Received data:", msg);
         const chat = msg.body.trim().toLowerCase(); // Pastikan pesan dalam lowercase
         const sender = msg.from; // Nomor pengirim
         const nameSender = msg.notifyName || "Pengirim";

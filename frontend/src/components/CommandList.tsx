@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 interface Command {
   id: number;
@@ -55,36 +56,44 @@ export default function CommandList() {
   };
 
   return (
-    <div className="p-4">
-      <h2 className="text-xl font-bold mb-4">Daftar Command Bot</h2>
+    <div className="max-w-screen-xl mx-auto mt-5">
+      <div className="flex w-full justify-between items-center mb-4">
+        <h2 className="text-xl font-bold">Daftar Command Bot</h2>
+        <Link to={"/commands/add"} className="button-primary px-3">Tambah Command</Link>
+      </div>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <table className="w-full border border-gray-300">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border p-2">Prefix</th>
-              <th className="border p-2">Command</th>
-              <th className="border p-2">Response</th>
-              <th className="border p-2">Deskripsi</th>
-              <th className="border p-2">Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            {commands.map((cmd) => (
-              <tr key={cmd.id}>
-                <td className="border p-2">{cmd.prefix}</td>
-                <td className="border p-2">{cmd.command}</td>
-                <td className="border p-2">{cmd.response}</td>
-                <td className="border p-2">{cmd.description || "-"}</td>
-                <td className="border p-2">
-                  <button className="text-blue-500 mr-2" onClick={() => setEditingCommand(cmd)}>Edit</button>
-                  <button className="text-red-500" onClick={() => deleteCommand(cmd.id)}>Hapus</button>
-                </td>
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+
+          <table className="w-full text-sm text-left rtl:text-right text-gray-900">
+            <thead className="text-xs text-white uppercase bg-gray-700">
+              <tr>
+                <th scope="col" className="px-6 py-3">Prefix</th>
+                <th scope="col" className="px-6 py-3">Command</th>
+                <th scope="col" className="px-6 py-3">Response</th>
+                <th scope="col" className="px-6 py-3">Deskripsi</th>
+                <th scope="col" className="px-6 py-3">Aksi</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {commands.map((cmd) => (
+                <tr key={cmd.id} className="bg-white border-b border-gray-200">
+                  <td className="px-6 py-4">{cmd.prefix}</td>
+                  <td className="px-6 py-4">{cmd.command}</td>
+                  <td className="px-6 py-4">{cmd.response}</td>
+                  <td className="px-6 py-4">{cmd.description || "-"}</td>
+                  <td className="px-6 py-4">
+                    <div className="flex gap-2 w-full">
+                      <button className="button-primary w-full" onClick={() => setEditingCommand(cmd)}>Edit</button>
+                      <button className="button-error w-full" onClick={() => deleteCommand(cmd.id)}>Hapus</button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
 
       {editingCommand && (
