@@ -21,11 +21,14 @@ function Navbar() {
     ];
 
     return (
-        <nav className="bg-gray-900">
+        <nav className="bg-primary">
             <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-                <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">
-                    WhatsappBot
-                </span>
+                <div className="flex items-center gap-2">
+                    <img src="/logo.jpeg" alt="logo.jpeg" className="w-10 h-10 object-cover rounded" />
+                    <span className="self-center text-2xl font-semibold whitespace-nowrap text-white">
+                        WhatsappBot
+                    </span>
+                </div>
                 <button
                     data-collapse-toggle="navbar-default"
                     type="button"
@@ -51,7 +54,7 @@ function Navbar() {
                     </svg>
                 </button>
                 <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-                    <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0 bg-gray-800 md:bg-gray-900 border-gray-700">
+                    <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0">
                         {navLinks.map(({ text, href, disabled }) => (
                             <li key={href}>
                                 <NavLink
@@ -61,8 +64,8 @@ function Navbar() {
                                             disabled
                                                 ? "text-gray-500 cursor-not-allowed opacity-50" // Efek disabled
                                                 : isActive
-                                                ? "text-white bg-blue-700 md:bg-transparent md:text-blue-500"
-                                                : "md:hover:bg-transparent text-white hover:text-blue-500 hover:bg-gray-700"
+                                                ? "text-secondary"
+                                                : "md:hover:bg-transparent text-white hover:text-secondary hover:bg-gray-700"
                                         }`
                                     }
                                 >

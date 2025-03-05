@@ -64,7 +64,7 @@ export default function CommandList() {
   };
 
   return (
-    <div className="max-w-screen-xl mx-auto mt-5">
+    <div className="max-w-screen-xl mx-auto mt-5 px-4 pb-4">
       <div className="flex w-full justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Daftar Command Bot</h2>
         <Link to={"/commands/add"} className="button-primary px-3">Tambah Command</Link>
@@ -88,7 +88,7 @@ export default function CommandList() {
         <div className="fixed inset-0 bg-[rgba(0,0,0,0.3)] flex justify-center items-center">
           <div className="bg-white p-4 rounded shadow-lg w-full sm:max-w-md">
             <h2 className="text-lg font-bold">Edit Command</h2>
-            <form onSubmit={updateCommand} className="flex flex-col gap-3">
+            <form onSubmit={updateCommand} className="flex flex-col gap-3 mt-3">
               <input
                 type="text"
                 value={editingCommand.prefix}

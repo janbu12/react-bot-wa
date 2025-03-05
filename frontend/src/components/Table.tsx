@@ -11,9 +11,9 @@ interface TableColumn<T> {
   
   export default function Table<T>({ columns, data, actions }: TableProps<T>) {
     return (
-      <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <div className="relative overflow-x-auto shadow sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-900">
-          <thead className="text-xs text-white uppercase bg-gray-700">
+          <thead className="text-xs uppercase drop-shadow bg-white">
             <tr>
               {columns.map((col) => (
                 <th key={col.key as string} className="px-6 py-3">

@@ -1,5 +1,6 @@
 import {useEffect , useState } from "react";
 import axios from "axios";
+import Table from "./Table";
 
 interface Log {
   id: number;
@@ -15,6 +16,14 @@ const API_URL = `${import.meta.env.VITE_API_URL}/logs`;
 export default function LogsList() {
   const [logs, setLogs] = useState<Log[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const columns : {key:keyof Log; label: string}[]= [
+    {key: "sender", label: "No Pengirim"},
+    {key: "name", label: "Nama Pengirim"},
+    {key: "message", label: "Pesan"},
+    {key: "response", label: "Respon"},
+    {key: "timestamp", label: "Waktu"},
+  ];
 
   useEffect(() => {
     fetchLogs();
@@ -33,33 +42,15 @@ export default function LogsList() {
   };
 
   return (
-    <div className="p-4">
+    <div className="max-w-screen-xl mx-auto mt-5 px-4 pb-4">
       <h2 className="text-xl font-bold mb-4">Log Aktivitas Bot</h2>
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <table className="w-full border border-gray-300">
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="border p-2">Waktu</th>
-              <th className="border p-2">No Pengirim</th>
-              <th className="border p-2">Nama Pengirim</th>
-              <th className="border p-2">Pesan</th>
-              <th className="border p-2">Response</th>
-            </tr>
-          </thead>
-          <tbody>
-            {logs.map((log) => (
-              <tr key={log.id}>
-                <td className="border p-2">{new Date(log.timestamp).toLocaleString()}</td>
-                <td className="border p-2">{log.sender}</td>
-                <td className="border p-2">{log.name}</td>
-                <td className="border p-2">{log.message}</td>
-                <td className="border p-2">{log.response}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <Table
+          columns={columns}
+          data={logs}
+        />
       )}
     </div>
   );
