@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import Table from "./Table";
 
 interface Command {
   id: number;
@@ -16,6 +17,13 @@ export default function CommandList() {
   const [commands, setCommands] = useState<Command[]>([]);
   const [loading, setLoading] = useState(true);
   const [editingCommand, setEditingCommand] = useState<Command | null>(null);
+
+  const columns : { key: keyof Command; label: string }[] = [
+    { key: "prefix", label: "Prefix" },
+    { key: "command", label: "Command" },
+    { key: "response", label: "Response" },
+    { key: "description", label: "Deskripsi" },
+  ];
 
   useEffect(() => {
     fetchCommands();
@@ -64,36 +72,16 @@ export default function CommandList() {
       {loading ? (
         <p>Loading...</p>
       ) : (
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-
-          <table className="w-full text-sm text-left rtl:text-right text-gray-900">
-            <thead className="text-xs text-white uppercase bg-gray-700">
-              <tr>
-                <th scope="col" className="px-6 py-3">Prefix</th>
-                <th scope="col" className="px-6 py-3">Command</th>
-                <th scope="col" className="px-6 py-3">Response</th>
-                <th scope="col" className="px-6 py-3">Deskripsi</th>
-                <th scope="col" className="px-6 py-3">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-              {commands.map((cmd) => (
-                <tr key={cmd.id} className="bg-white border-b border-gray-200">
-                  <td className="px-6 py-4">{cmd.prefix}</td>
-                  <td className="px-6 py-4">{cmd.command}</td>
-                  <td className="px-6 py-4">{cmd.response}</td>
-                  <td className="px-6 py-4">{cmd.description || "-"}</td>
-                  <td className="px-6 py-4">
-                    <div className="flex gap-2 w-full">
-                      <button className="button-primary w-full" onClick={() => setEditingCommand(cmd)}>Edit</button>
-                      <button className="button-error w-full" onClick={() => deleteCommand(cmd.id)}>Hapus</button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <Table
+          columns={columns}
+          data={commands}
+          actions={(cmd) => (
+            <div className="flex gap-2">
+              <button className="button-primary" onClick={() => setEditingCommand(cmd)}>Edit</button>
+              <button className="button-error" onClick={() => deleteCommand(cmd.id)}>Hapus</button>
+            </div>
+          )}
+        />
       )}
 
       {editingCommand && (
