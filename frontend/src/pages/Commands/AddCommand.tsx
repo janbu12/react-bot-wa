@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import CommandForm from '../../components/CommandForm'
 
 function AddCommand() {

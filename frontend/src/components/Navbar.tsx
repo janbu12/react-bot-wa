@@ -1,23 +1,40 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useWebSocket } from "../context/WebSocketContext";
 import { useEffect, useState } from "react";
 
 function Navbar() {
-    const { isConnected } = useWebSocket();
+    const { isConnected, setIsConnected } = useWebSocket();
     const [isDisabled, setIsDisabled] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isConnected) {
+        if(!isConnected) {
             setIsDisabled(false);
-        } else {
-            setIsDisabled(true);
         }
+
+        setIsDisabled(isConnected);
     }, [isConnected]);
 
+    const handleLogout = async () => {
+        try {
+            const response = await fetch("http://localhost:5001/api/logout");
+            const data = await response.json();
+            alert(data.message);
+            setIsConnected(false);
+            navigate("/");
+            window.location.reload();
+        } catch (error) {
+            console.error("Logout error:", error);
+            alert("Gagal logout");
+        }
+    };
+
+
     const navLinks = [
-        { text: "Commands", href: "/commands", disabled: false },
-        { text: "Logs", href: "/logs", disabled: false },
-        { text: isConnected ? "Terhubung" : "Hubungkan Ulang", href: "/", disabled: isDisabled },
+        { text: "Commands", href: "/commands", isExternal: false, disabled: false },
+        { text: "Logs", href: "/logs", isExternal: false, disabled: false },
+        { text: "Logout", href: "#", isExternal: true, disabled: false, onClick: handleLogout }, // Pakai onClick
+        { text: isConnected ? "Terhubung" : "Hubungkan Ulang", href: "/", isExternal: false, disabled: isDisabled },
     ];
 
     return (
@@ -55,22 +72,36 @@ function Navbar() {
                 </button>
                 <div className="hidden w-full md:block md:w-auto" id="navbar-default">
                     <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 border rounded-lg md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0 md:border-0">
-                        {navLinks.map(({ text, href, disabled }) => (
-                            <li key={href}>
-                                <NavLink
-                                    to={disabled ? "#" : href} // Hanya nonaktifkan jika disabled
-                                    className={({ isActive }) =>
-                                        `block py-2 px-3 rounded-sm md:p-0 transition-all ${
+                        {navLinks.map(({ text, href, isExternal, disabled, onClick }) => (
+                            <li key={text}>
+                                {isExternal ? (
+                                    <button
+                                        onClick={onClick}
+                                        disabled={disabled}
+                                        className={`block py-2 px-3 rounded-sm md:p-0 transition-all ${
                                             disabled
-                                                ? "text-gray-500 cursor-not-allowed opacity-50" // Efek disabled
-                                                : isActive
-                                                ? "text-secondary"
-                                                : "md:hover:bg-transparent text-white hover:text-secondary hover:bg-gray-700"
-                                        }`
-                                    }
-                                >
-                                    {text}
-                                </NavLink>
+                                                ? "text-gray-500 cursor-not-allowed opacity-50"
+                                                : "text-white hover:text-secondary hover:cursor-pointer"
+                                        }`}
+                                    >
+                                        {text}
+                                    </button>
+                                ) : (
+                                    <NavLink
+                                        to={disabled ? "#" : href}
+                                        className={({ isActive }) =>
+                                            `block py-2 px-3 rounded-sm md:p-0 transition-all ${
+                                                disabled
+                                                    ? "text-gray-500 cursor-not-allowed opacity-50"
+                                                    : isActive
+                                                    ? "text-secondary"
+                                                    : "md:hover:bg-transparent text-white hover:text-secondary hover:bg-gray-700"
+                                            }`
+                                        }
+                                    >
+                                        {text}
+                                    </NavLink>
+                                )}
                             </li>
                         ))}
                     </ul>

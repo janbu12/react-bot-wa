@@ -6,6 +6,7 @@ type WebSocketContextType = {
   isConnected: boolean;
   status: string;
   qrCode: string | null;
+  setIsConnected: (status: boolean) => void;
 };
 
 const WebSocketContext = createContext<WebSocketContextType | undefined>(undefined);
@@ -48,7 +49,7 @@ export function WebSocketProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   return (
-    <WebSocketContext.Provider value={{ isConnected, status, qrCode }}>
+    <WebSocketContext.Provider value={{ isConnected, status, qrCode, setIsConnected }}>
       {children}
     </WebSocketContext.Provider>
   );

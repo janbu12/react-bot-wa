@@ -5,6 +5,8 @@ const cors = require("cors");
 const { Client, LocalAuth } = require("whatsapp-web.js");
 const qrcode = require("qrcode");
 const db = require("./database");
+const fs = require("fs");
+const path = require("path");
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -54,6 +56,55 @@ app.get("/api/logs", (req, res) => {
     res.json(logs);
 });
 
+app.get("/api/logout", async (req, res) => {
+    try {
+        console.log("Logging out...");
+
+        if (client) {
+            await client.logout(); // Logout dari WhatsApp
+            console.log("Client logged out");
+
+            await client.destroy(); // Hentikan client dan Puppeteer
+            console.log("Client destroyed");
+
+            // Hapus sesi dari sistem file (jika menggunakan LocalAuth)
+            const sessionPath = "./session"; // Sesuaikan dengan lokasi sesi
+            if (fs.existsSync(sessionPath)) {
+                fs.rmSync(sessionPath, { recursive: true, force: true });
+                console.log("Session folder deleted");
+            }
+
+            // Pastikan semua event listener dihapus untuk mencegah memory leak
+            client.removeAllListeners();
+        }
+
+        // Inisialisasi ulang WhatsApp client (jika diperlukan)
+        // global.clientInstance = new Client({
+        //     authStrategy: new LocalAuth({ dataPath: "./session" }),
+        //     puppeteer: {
+        //         headless: true,
+        //         args: [
+        //             "--no-sandbox",
+        //             "--disable-setuid-sandbox",
+        //             "--disable-dev-shm-usage",
+        //             "--disable-accelerated-2d-canvas",
+        //             "--disable-gpu"
+        //         ]
+        //     }
+        // });
+
+        // // Tunggu beberapa detik sebelum inisialisasi ulang
+        // setTimeout(() => {
+        //     global.clientInstance.initialize();
+        // }, 3000);
+
+        res.json({ success: true, message: "Logout successful, session removed" });
+    } catch (error) {
+        console.error("Logout error:", error);
+        res.status(500).json({ success: false, message: "Logout failed", error: error.message });
+    }
+});
+
 // ENDPOINT END
 
 const wss = new Server({ server });
@@ -61,10 +112,21 @@ const wss = new Server({ server });
 // Inisialisasi WhatsApp client dengan sesi lokal
 const client = new Client({
   authStrategy: new LocalAuth({ dataPath: "./session" }),
+  puppeteer: {
+        headless: true,
+        args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-accelerated-2d-canvas",
+            "--disable-gpu"
+        ]
+    }
 });
 
 wss.on("connection", (ws) => {
     console.log("New WebSocket connection");
+    client.removeAllListeners();
 
     // Jika sesi sudah ada, kirim status "ready"
     client.getState().then((state) => {
